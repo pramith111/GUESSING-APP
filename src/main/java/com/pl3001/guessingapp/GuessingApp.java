@@ -1,45 +1,75 @@
 //Author Developer
-//Version 4
+//Version 5
 package com.pl3001.guessingapp;
-
+import java.io.BufferedWriter;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.Scanner;
 
 public class GuessingApp {
 
     public static void main(String[] args) throws InvalidInputException {
 
-        GameConfig config = new GameConfig();
-        Scanner scanner = new Scanner(System.in);
+    Scanner scanner = new Scanner(System.in);
 
-        int attempts = 0;
-        int hintsUsed = 0;
+    System.out.println("===============================");
+    System.out.println("Welcome to the Guessing App");
+    System.out.println("===============================\n");
 
-        while (attempts < config.getMaxAttempts()) {
+    /*
+     * Player name is captured once
+     * and stored along with game results.
+     */
+    System.out.print("Enter Player Name: ");
+    String player = scanner.nextLine();
 
-            System.out.print("Enter your guess: ");
-            int guess = ValidationService.validateInput(scanner.nextLine());
-            attempts++;
+    GameConfig config = new GameConfig();
+    config.showRules();
 
-            String result = GuessValidator.validateGuess(
-                    guess, config.getTargetNumber());
+    int attempts = 0;
+    int hintsUsed = 0;
 
-            if (!"CORRECT".equals(result)
-                    && hintsUsed < config.getMaxHints()) {
+    /*
+     * Tracks whether the player
+     * successfully guessed the number.
+     */
+    boolean win = false;
+	
 
-                hintsUsed++;
-                System.out.println(
-                        HintService.generateHint(
-                                config.getTargetNumber(),
-                                hintsUsed));
-            }
 
-            System.out.println(result);
+/*
+ * Game loop runs until the player
+ * exhausts the maximum attempts.
+ */
+while (attempts < config.getMaxAttempts()) {
 
-            if ("CORRECT".equals(result)) {
-                break;
-            }
-        }
+  
 
-        scanner.close();
+    System.out.print("Enter your guess: ");
+
+    int guess = ValidationService.validateInput(scanner.nextLine());
+    attempts++;
+
+    String result = GuessValidator.validateGuess(
+            guess, config.getTargetNumber());
+
+    if (!"CORRECT".equals(result) && hintsUsed < config.getMaxHints()) {
+        hintsUsed++;
+        System.out.println(
+                HintService.generateHint(
+                        config.getTargetNumber(), hintsUsed)
+        );
     }
+
+    System.out.println(result);
+
+    if ("CORRECT".equals(result)) {
+        
+        break;
+    }
+}
+
+StorageService.saveResult(player, attempts, win);
+
+}
 }
