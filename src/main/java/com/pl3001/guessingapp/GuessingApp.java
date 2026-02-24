@@ -11,15 +11,13 @@ public class GuessingApp {
     public static void main(String[] args) throws InvalidInputException {
 
     Scanner scanner = new Scanner(System.in);
-
+    boolean restart;
     System.out.println("===============================");
     System.out.println("Welcome to the Guessing App");
     System.out.println("===============================\n");
 
-    /*
-     * Player name is captured once
-     * and stored along with game results.
-     */
+  
+    do{
     System.out.print("Enter Player Name: ");
     String player = scanner.nextLine();
 
@@ -29,21 +27,11 @@ public class GuessingApp {
     int attempts = 0;
     int hintsUsed = 0;
 
-    /*
-     * Tracks whether the player
-     * successfully guessed the number.
-     */
     boolean win = false;
 	
 
 
-/*
- * Game loop runs until the player
- * exhausts the maximum attempts.
- */
-while (attempts < config.getMaxAttempts()) {
-
-  
+    while (attempts < config.getMaxAttempts()) {
 
     System.out.print("Enter your guess: ");
 
@@ -70,6 +58,7 @@ while (attempts < config.getMaxAttempts()) {
 }
 
 StorageService.saveResult(player, attempts, win);
+restart=GameController.restartGame(scanner);
+}while(restart);
 
-}
-}
+}}
