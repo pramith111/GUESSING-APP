@@ -1,5 +1,5 @@
 //Author Developer
-//Version 5
+//Version 6
 package com.pl3001.guessingapp;
 import java.io.BufferedWriter;
 import java.io.FileWriter;
